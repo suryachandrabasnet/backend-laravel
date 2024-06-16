@@ -61,10 +61,10 @@ jobs:
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
           FTP_HOST: ${{ secrets.FTP_HOST }}
         run: |
-          lftp -u $FTP_USERNAME,$FTP_PASSWORD $FTP_HOST <<EOF
-          put -O /home/diwakarkcom.np/Surya/ ./deploy/${{ github.sha }}.tar.gz
-          cd /home/diwakarkcom.np/Surya/
-          tar -xzf ${GITHUB_SHA}.tar.gz
-          rm ${GITHUB_SHA}.tar.gz
-          bye
-          EOF
+          lftp -e "
+          set ssl:verify-certificate no;
+          put -O /home/diwakarkcom.np/Surya/ ./deploy/${{ github.sha }}.tar.gz;
+          cd /home/diwakarkcom.np/Surya/;
+          !tar -xzf ${GITHUB_SHA}.tar.gz;
+          !rm ${GITHUB_SHA}.tar.gz;
+          bye" -u $FTP_USERNAME,$FTP_PASSWORD $FTP_HOST
