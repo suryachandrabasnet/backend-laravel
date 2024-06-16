@@ -44,17 +44,12 @@ jobs:
     needs: create-deployment-artifacts
 
     steps:
-      - name: Install FTP client
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y lftp
-          
       - name: Upload artifact to cPanel using FTP
         env:
           FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
           FTP_HOST: ${{ secrets.FTP_HOST }}
         run: |
-          apt-get install -y lftp
+          sudo apt-get install -y lftp
           lftp -e "put -O /public_html/ ${{ github.sha }}.tar.gz; bye" -u $FTP_USERNAME,$FTP_PASSWORD $FTP_HOST
           lftp -e "cd /public_html; tar -xzf ${{ github.sha }}.tar.gz; rm ${{ github.sha }}.tar.gz; bye" -u $FTP_USERNAME,$FTP_PASSWORD $FTP_HOST
