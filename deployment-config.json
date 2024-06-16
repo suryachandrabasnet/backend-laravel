@@ -1,0 +1,12 @@
+[
+    {
+        "name": "server-1",
+        "ip": "45.117.153.41",
+        "username": "surya",
+        "password": "SuryaBamsi@1234",
+        "port": "22",
+        "beforeHook": "",
+        "afterHook": "",
+        "path": "public_html/pp.diwakark.com.np"
+    }
+]
