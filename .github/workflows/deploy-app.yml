@@ -51,5 +51,5 @@ jobs:
           FTP_HOST: ${{ secrets.FTP_HOST }}
         run: |
           sudo apt-get install -y lftp
-          lftp -e "put -O /public_html/ ${{ github.sha }}.tar.gz; bye" -u $FTP_USERNAME,$FTP_PASSWORD $FTP_HOST
-          lftp -e "cd /public_html; tar -xzf ${{ github.sha }}.tar.gz; rm ${{ github.sha }}.tar.gz; bye" -u $FTP_USERNAME,$FTP_PASSWORD $FTP_HOST
+          lftp -e "put -O /home/diwakarkcom.np/Surya/ ${{ github.sha }}.tar.gz; bye" -u $FTP_USERNAME,$FTP_PASSWORD $FTP_HOST
+          lftp -e "cd /home/diwakarkcom.np/Surya/; tar -xzf ${{ github.sha }}.tar.gz; rm ${{ github.sha }}.tar.gz; bye" -u $FTP_USERNAME,$FTP_PASSWORD $FTP_HOST
