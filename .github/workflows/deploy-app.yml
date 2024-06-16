@@ -44,12 +44,27 @@ jobs:
     needs: create-deployment-artifacts
 
     steps:
-      - name: Upload artifact to cPanel using FTP
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: app-build
+          path: ./deploy # Specify a local directory for the artifact
+
+      - name: Install FTP client
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y lftp
+
+      - name: Upload and Extract Artifact on cPanel
         env:
           FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
           FTP_HOST: ${{ secrets.FTP_HOST }}
         run: |
-          sudo apt-get install -y lftp
-          lftp -e "put -O /home/diwakarkcom.np/Surya/ ${{ github.sha }}.tar.gz; bye" -u $FTP_USERNAME,$FTP_PASSWORD $FTP_HOST
-          lftp -e "cd /home/diwakarkcom.np/Surya/; tar -xzf ${{ github.sha }}.tar.gz; rm ${{ github.sha }}.tar.gz; bye" -u $FTP_USERNAME,$FTP_PASSWORD $FTP_HOST
+          lftp -u $FTP_USERNAME,$FTP_PASSWORD $FTP_HOST <<EOF
+          put -O /home/diwakarkcom.np/Surya/ ./deploy/${{ github.sha }}.tar.gz
+          cd /home/diwakarkcom.np/Surya/
+          tar -xzf ${GITHUB_SHA}.tar.gz
+          rm ${GITHUB_SHA}.tar.gz
+          bye
+          EOF
